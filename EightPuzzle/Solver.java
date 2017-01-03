@@ -7,14 +7,12 @@ public class Solver {
   private MinPQ<Node> minPQTwin;
   private Board board;
   private Board twin;
-  //private HashMap<Board, Board> cameFrom;
   private boolean notSolvable;
   private Node goalNode;
 
   public Solver(Board initial) {
     minPQ = new MinPQ<Node>();
     minPQTwin = new MinPQ<Node>();
-    //cameFrom = new HashMap<Board, Board>();
     board = initial;
     twin = board.twin();
     minPQ.insert(new Node(board,0,null));
@@ -26,7 +24,6 @@ public class Solver {
     public final Board board;
     public final int moves;
     public final Node previous;
-    //public static final Comparator<Node> BY_MANHATTAN = new byManhattan();
 
     public Node(Board b, int m, Node n) {
       board = b;
@@ -57,13 +54,6 @@ public class Solver {
   }
 
   private void test() {
-    //System.out.println("hey");
-    //System.out.println(minPQ.min().board);
-    //System.out.println(minPQTwin.min().board);
-    //List<Board> visited = new ArrayList<Board>();
-    //List<Board> visitedTwin = new ArrayList<Board>();
-    //System.out.println("inside");
-    //System.out.println(this.minPQ.min().board);
     while (!minPQ.min().board.isGoal()) {
       if (minPQTwin.min().board.isGoal()) {
         notSolvable = true;
@@ -71,16 +61,11 @@ public class Solver {
       }
       Node minKey = minPQ.delMin();
       Node minKeyTwin = minPQTwin.delMin();
-      //System.out.println("inside "+minKey.board);
-      //visited.add(minKey.board);
-      //visitedTwin.add(minKeyTwin.board);
-      //System.out.println("inside");
       Iterable<Board> neighbors = minKey.board.neighbors();
       Iterable<Board> neighborsTwin = minKeyTwin.board.neighbors();
       for(Board neighbor: neighbors) {
         if (minKey.previous == null || !(minKey.previous.board).equals(neighbor)) {
           minPQ.insert(new Node(neighbor, minKey.moves+1, minKey));
-          //cameFrom.put(neighbor,minKey.board); // child -> parent
         }
       }
 
@@ -103,11 +88,7 @@ public class Solver {
       return null;
     List<Board> listMoves = new ArrayList<Board>();
     Node current = goalNode;
-    //System.out.println(current);
-    //System.out.println(board);
-    //System.out.println("hoho");
     while (!current.board.equals(board)) {
-      //System.out.println("hi");
       listMoves.add(0,current.board);
       current = current.previous;
     }
@@ -122,7 +103,6 @@ public class Solver {
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++) {
         blocks[i][j] = in.readInt();
-        //System.out.println(blocks[i][j]);
       }
     Board test = new Board(blocks);
     Solver tst = new Solver(test);
